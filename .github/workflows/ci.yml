@@ -39,13 +39,11 @@ jobs:
       - name: Upload Artifacts to Amazon S3
         run: |
           echo "Preparing artifacts for S3 upload..."
-          # ダミーの成果物ファイルを作成（実際にはモデルファイルやログが入ります）
+          # ダミーの成果物ファイルを作成（実際にはモデルファイルや軽量化データが入ります）
           mkdir -p output_artifacts
           echo "SDV AI Model Training Log - $(date)" > output_artifacts/training_summary.txt
           
           # AWS CLIを使ってS3バケットへ同期（アップロード）
-          # ※下の 'your-s3-bucket-name' をご自身のS3バケット名に変更してください
-          aws s3 sync output_artifacts/ s3:sdv-ai-edge-artifacts-kcbn-505381157538-ap-southeast-2-an/artifacts/
-          
+          aws s3 sync output_artifacts/ s3://sdv-ai-edge-artifacts-kcbn-505381157538-ap-southeast-2-an/artifacts/
           
           echo "Successfully uploaded artifacts to Amazon S3!"
