@@ -1,4 +1,5 @@
-name: SDV AI Code CI
+name: SDV AI Code CI & AWS S3 Deploy
+
 on:
   push:
     branches: [ main ]
@@ -25,3 +26,26 @@ jobs:
         run: |
           echo "Running automated checks for SDV AI pipeline..."
           python -c "print('CI Pipeline Test Passed Successfully!')"
+
+      # --- AWS 認証設定 ---
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-2
+
+      # --- テスト成果物をS3に自動アップロード ---
+      - name: Upload Artifacts to Amazon S3
+        run: |
+          echo "Preparing artifacts for S3 upload..."
+          # ダミーの成果物ファイルを作成（実際にはモデルファイルやログが入ります）
+          mkdir -p output_artifacts
+          echo "SDV AI Model Training Log - $(date)" > output_artifacts/training_summary.txt
+          
+          # AWS CLIを使ってS3バケットへ同期（アップロード）
+          # ※下の 'your-s3-bucket-name' をご自身のS3バケット名に変更してください
+          aws s3 sync output_artifacts/ s3:sdv-ai-edge-artifacts-kcbn-505381157538-ap-southeast-2-an/artifacts/
+          
+          
+          echo "Successfully uploaded artifacts to Amazon S3!"
