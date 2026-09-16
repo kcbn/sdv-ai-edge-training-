@@ -3,14 +3,9 @@ import torch
 import torch.nn as nn
 
 class DriverHMIAttentionModel(nn.Module):
-    """
-    【車載HMI向け実用例】ドライバーの状態・注意監視モデル
-    - 入力: 車載IRカメラから抽出された顔のランドマークや特徴量ベクトル（例: 64次元）
-    - 出力: ドライバーの状態分類（例: 3クラス [1: 前方注視, 2: わき見, 3: 居眠り兆候]）
-    """
+    """車載HMI向けドライバー状態・注意監視モデル"""
     def __init__(self, input_dim=64, hidden_dim=32, output_dim=3):
         super(DriverHMIAttentionModel, self).__init__()
-        # エッジデバイス（車載ECU）の限られたメモリ・演算リソースを考慮したコンパクトな設計
         self.fc1 = nn.Linear(input_dim, hidden_dim)
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout(0.1)
@@ -24,32 +19,42 @@ class DriverHMIAttentionModel(nn.Module):
         return x
 
 def main():
-    print("=== SDV / HMI Edge AI Model Quantization Pipeline ===")
-    
-    # PyTorchの量子化エンジンの指定（CPU環境向け）
-    torch.backends.quantized.engine = 'qnnpack'
+    print("=== SDV / HMI Edge AI: Quantization & ONNX Export Pipeline ===")
     
     # 1. HMIモデルの初期化
     model = DriverHMIAttentionModel()
     model.eval()
-    print("1. 車載HMI向けドライバー状態検知モデルの初期化が完了しました。")
+    print("1. 車載HMI向けモデルの初期化完了。")
 
-    # 2. 動的量子化（Dynamic Quantization）の適用
-    # float32からint8へ量子化することで、車載エッジでのメモリフットプリントと推論負荷を大幅に削減
-    quantized_model = torch.quantization.quantize_dynamic(
-        model, 
-        {nn.Linear}, 
-        dtype=torch.qint8
-    )
-    print("2. モデルのINT8量子化（エッジ軽量化）が正常に完了しました。")
-
-    # 3. 成果物ディレクトリの作成とモデルの保存
+    # 2. 成果物ディレクトリの作成
     output_dir = "output_artifacts"
     os.makedirs(output_dir, exist_ok=True)
     
-    model_path = os.path.join(output_dir, "hmi_driver_attention_quantized.pt")
-    torch.save(quantized_model.state_dict(), model_path)
-    print(f"3. 軽量化されたHMIモデルを保存しました: {model_path}")
+    # PyTorch版（軽量化用）の保存
+    torch.backends.quantized.engine = 'qnnpack'
+    quantized_model = torch.quantization.quantize_dynamic(
+        model, {nn.Linear}, dtype=torch.qint8
+    )
+    pt_path = os.path.join(output_dir, "hmi_driver_attention_quantized.pt")
+    torch.save(quantized_model.state_dict(), pt_path)
+    print(f"2-1. PyTorch量子化モデルを保存しました: {pt_path}")
+
+    # --- 3. ONNXフォーマットへの変換（エッジ実機・推論用） ---
+    # モデルの入力形状（バッチサイズ1、64次元の特徴量）に合わせたダミー入力を準備
+    dummy_input = torch.randn(1, 64)
+    onnx_path = os.path.join(output_dir, "hmi_driver_attention.onnx")
+    
+    torch.onnx.export(
+        model,                  # 変換するモデル
+        dummy_input,            # ダミー入力（形状確認用）
+        onnx_path,              # 出力先パス
+        export_params=True,     # 重みパラメータも含めて出力
+        opset_version=14,       # ONNXのバージョン
+        do_constant_folding=True, # 定数畳み込みによる最適化
+        input_names=['input_features'],   # 入力層の名前
+        output_names=['attention_scores'] # 出力層の名前
+    )
+    print(f"2-2. 車載エッジ用ONNXモデルを生成しました: {onnx_path}")
 
 if __name__ == "__main__":
     main()
