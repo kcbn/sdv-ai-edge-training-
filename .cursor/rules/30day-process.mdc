@@ -8,7 +8,8 @@ alwaysApply: true
 Source of truth: `docs/HMI-AI_30日統合計画.md`. Claude plans and reviews. Cursor implements.
 
 - Never add brake, steer, throttle, or other actuators to Copilot or Bedrock output.
-- Change `process/allowlist.json` or `process/scenes/` only when the user explicitly owns that change.
+- Change `process/allowlist.json` or `process/scenes/` only when the user explicitly owns that change. Those paths are owned via `.github/CODEOWNERS`.
+- CI must keep the named step `Forbidden-word gate (H3)` (`python -m copilot.safety`).
 - Vehicle path (`copilot/`) must not call Bedrock or other cloud LLMs. Overload scenes keep `llm_allowed` false.
 - `dev_platform/` is the GitHub/AWS development path (Week 1). Do not import it from `copilot/`.
 - Do not restore deleted lab scripts. Work via `dev` / feature branches; do not treat `main` as a scratch pad.

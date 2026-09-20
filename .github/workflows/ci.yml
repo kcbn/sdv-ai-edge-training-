@@ -22,6 +22,8 @@ jobs:
         run: python -m ruff check copilot tests dev_platform
       - name: Pytest
         run: python -m pytest -q
+      - name: Forbidden-word gate (H3)
+        run: python -m copilot.safety
       - name: Copilot scenes
         run: |
           python -m copilot --scene overload

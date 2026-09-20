@@ -1,0 +1,6 @@
+# Human-owned safety surface. Enable "Require review from Code Owners"
+# on the GitHub branch protection rules for `main` and `dev`.
+process/allowlist.json @kcbn
+process/hazards.md @kcbn
+process/scenes/ @kcbn
+.github/CODEOWNERS @kcbn

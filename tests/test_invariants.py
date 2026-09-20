@@ -8,11 +8,12 @@ SKIP_NAMES = {
     "test_invariants.py",
     "hazards.md",
     "test_dev_platform.py",
+    "test_forbidden_output.py",
     "bedrock_chat.py",
 }
 
 
-def test_vehicle_path_has_no_actuator_commands() -> None:
+def test_source_tree_has_no_actuator_command_tokens() -> None:
     pattern = re.compile(r"\b(" + "|".join(map(re.escape, forbidden_actuators())) + r")\b", re.I)
     hits: list[str] = []
     for folder in SCAN_DIRS:
