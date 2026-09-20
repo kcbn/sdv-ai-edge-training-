@@ -1,0 +1,25 @@
+{
+  "id": "stable",
+  "owner": "human",
+  "accepted": true,
+  "expected_state": "stable",
+  "utterance": "なんか車内が暑いな",
+  "sample": {
+    "speed_kph": 62.0,
+    "long_accel_mps2": 0.2,
+    "lat_accel_mps2": 0.1,
+    "yaw_rate_dps": 1.0,
+    "steering_rate_dps": 4.0,
+    "gaze_variance": 0.12,
+    "blink_rate_hz": 0.28,
+    "head_pose_off_forward": 0.05,
+    "phone_use": 0.0,
+    "navi_prompt_rate": 0.2,
+    "hud_item_count": 3.0,
+    "time_to_collision_s": 8.0,
+    "lane_offset_m": 0.08,
+    "cabin_noise_db": 58.0,
+    "hour_of_day": 8.0,
+    "trip_minutes": 12.0
+  }
+}

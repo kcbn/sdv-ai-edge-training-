@@ -1,0 +1,7 @@
+numpy>=1.26
+pytest>=8.0
+ruff>=0.6
+boto3>=1.35
+torch>=2.2; python_version < "3.14"
+onnx>=1.16; python_version < "3.14"
+onnxruntime>=1.18; python_version < "3.14"

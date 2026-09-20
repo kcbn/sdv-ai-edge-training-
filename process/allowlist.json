@@ -1,0 +1,22 @@
+{
+  "owner": "human",
+  "review_required": true,
+  "notes": "許可リストの変更は人がマージする。AIは新しいアクチュエータを追加しない。",
+  "allowed_hmi_actions": [
+    "keep_normal_display",
+    "reduce_hud_density",
+    "suppress_noncritical_hud",
+    "mute_entertainment_audio",
+    "defer_navi_prompt",
+    "request_driver_attention"
+  ],
+  "forbidden_actuators": [
+    "brake",
+    "steer",
+    "throttle",
+    "airbag",
+    "adas_override"
+  ],
+  "llm_may_emit": ["driver_message"],
+  "llm_must_not_emit": ["vehicle_command", "actuator_command"]
+}

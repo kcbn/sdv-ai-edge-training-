@@ -1,0 +1,25 @@
+{
+  "id": "overload",
+  "owner": "human",
+  "accepted": true,
+  "expected_state": "overload_risk",
+  "utterance": "なんか車内が暑いな",
+  "sample": {
+    "speed_kph": 88.0,
+    "long_accel_mps2": 1.8,
+    "lat_accel_mps2": 2.4,
+    "yaw_rate_dps": 18.0,
+    "steering_rate_dps": 42.0,
+    "gaze_variance": 0.82,
+    "blink_rate_hz": 0.08,
+    "head_pose_off_forward": 0.35,
+    "phone_use": 1.0,
+    "navi_prompt_rate": 2.4,
+    "hud_item_count": 11.0,
+    "time_to_collision_s": 1.6,
+    "lane_offset_m": 0.45,
+    "cabin_noise_db": 74.0,
+    "hour_of_day": 19.0,
+    "trip_minutes": 48.0
+  }
+}
