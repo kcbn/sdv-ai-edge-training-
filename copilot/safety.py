@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from typing import Any
 
 from copilot.process_io import allowed_hmi_actions, forbidden_actuators
@@ -33,16 +34,25 @@ def assert_safe_output(payload: dict[str, Any]) -> None:
         raise AssertionError(f"forbidden tokens in Copilot output: {hits}")
 
 
-def main() -> None:
+def evaluate_scenes() -> int:
     from copilot.features import load_sample
     from copilot.process_io import accepted_scene_ids, load_scene
     from copilot.runtime import run_copilot
 
-    for scene_id in accepted_scene_ids():
-        spec = load_scene(scene_id)
-        decision = run_copilot(load_sample(scene_id), utterance=spec.get("utterance"))
-        assert_safe_output(decision.to_dict())
+    try:
+        for scene_id in accepted_scene_ids():
+            spec = load_scene(scene_id)
+            decision = run_copilot(load_sample(scene_id), utterance=spec.get("utterance"))
+            assert_safe_output(decision.to_dict())
+    except AssertionError as exc:
+        print(f"forbidden-word gate failed: {exc}", file=sys.stderr)
+        return 1
     print("forbidden-word gate ok")
+    return 0
+
+
+def main() -> None:
+    raise SystemExit(evaluate_scenes())
 
 
 if __name__ == "__main__":
