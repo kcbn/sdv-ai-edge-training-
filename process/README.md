@@ -31,6 +31,10 @@ Claude が計画・レビュー、Cursor が実装。
 
 許可 HMI は `process/allowlist.json` の6アクションのみ。操舵・制動には関与しない。
 
+- **H3 禁則語**: CI が `python -m copilot.safety` を実行し、採択済みシーンの出力 JSON に禁則アクチュエータ語と allowlist 外アクションがあれば落とす
+- **許可リストの人レビュー**: `.github/CODEOWNERS` が `process/allowlist.json` 等を `@kcbn` 所有にする。GitHub の branch protection で **Require review from Code Owners** を `main` / `dev` に付ける（プロンプト制約の代替）
+- **ゴールデンセット**: 今は `overload` と `stable` の2件。境界ケースは Week 2–3 で追加し、Week 4 統合評価の前に揃える
+
 ## 週次（統合計画）
 
 | 週 | 完了の定義 | 今 |
