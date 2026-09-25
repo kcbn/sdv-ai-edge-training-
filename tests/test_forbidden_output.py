@@ -74,6 +74,6 @@ def test_dev_platform_dry_run_output_has_no_vehicle_command() -> None:
     chat = BedrockChat().complete("少し眠い", dry_run=True).to_dict()
     assert chat["vehicle_command"] is None
     assert forbidden_hits(json.dumps(chat, ensure_ascii=False)) == []
-    body = json.loads(handler({"body": json.dumps({"text": "少し眠い", "dry_run": True})})["body"])
+    body = json.loads(handler({"body": json.dumps({"text": "少し眠い"})})["body"])
     assert body["vehicle_command"] is None
     assert forbidden_hits(json.dumps(body, ensure_ascii=False)) == []

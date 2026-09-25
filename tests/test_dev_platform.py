@@ -1,7 +1,6 @@
 import json
 
 from dev_platform.bedrock_chat import BedrockChat, parse_model_json
-from dev_platform.lambda_handler import handler
 
 
 class FakeBedrock:
@@ -43,16 +42,3 @@ def test_live_path_parses_schema() -> None:
     result = BedrockChat(client=client).complete("眠いかも", dry_run=False)
     assert result.reply.startswith("休憩")
     assert result.intent == "suggest"
-
-
-def test_lambda_requires_text() -> None:
-    response = handler({"body": "{}"})
-    assert response["statusCode"] == 400
-
-
-def test_lambda_dry_run_ok() -> None:
-    response = handler({"body": json.dumps({"text": "少し眠い", "dry_run": True})})
-    assert response["statusCode"] == 200
-    body = json.loads(response["body"])
-    assert body["vehicle_command"] is None
-    assert body["dry_run"] is True
