@@ -78,7 +78,7 @@ class BedrockChat:
         region: str | None = None,
     ) -> None:
         self.model_id = model_id or os.environ.get(
-            "BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0"
+            "BEDROCK_MODEL_ID", "amazon.nova-micro-v1:0"
         )
         self.region = region or os.environ.get("AWS_REGION", "ap-southeast-2")
         self._client = client
